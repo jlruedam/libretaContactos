@@ -1,18 +1,40 @@
+from multiprocessing import context
 from django.shortcuts import render
 import pandas
+from Contactos.models import Contacto
 
 # Create your views here.
 
 def index(request):
-    return render(request, "./Contactos/index.html")
+    dataContactos=Contacto.objects.all()
+    print(dataContactos)
+    context={
+        "dataContactos":dataContactos
+    }
+
+    return render(request, "./Contactos/index.html",context)
 
 def cargarDatos(request):
     data=request.FILES["dataExcel"]
-    print(data)
-    df = pandas.read_excel(data, index_col="Identificador")
-    print(df)
+    print("El archivo es:",data)
+    df = pandas.read_excel(data)
+    # print(list(df["Nombres"]))
 
-    # for data in df.columns[0]:
-    #     print(data)
+    dataContactos=Contacto.objects.all()
+    print(dataContactos)
+    context={
+        "dataContactos":dataContactos
+    }
 
-    return render(request, "./Contactos/index.html")
+
+    for i in range(len(df)):
+        # print(dict(df.iloc[i])["Cedula"])
+        newContacto=Contacto(
+            cedula=dict(df.iloc[i])["Cedula"],
+            nombre=dict(df.iloc[i])["Nombres"],
+            apellido=dict(df.iloc[i])["Apellidos"],
+            correo=dict(df.iloc[i])["Correo"]
+        )
+        newContacto.save()
+    
+    return render(request, "./Contactos/index.html",context)
