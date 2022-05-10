@@ -15,35 +15,38 @@
             <span>Cargar Archivo</span>
             <input type="file" name="dataExcel">
         </label>
-
+        <br>
         <input type="submit" value="upload">
     </form>
 
-    
-        <table>
-            <thead>
-                <tr>
-                    <th>Cédula</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Correo</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in dataContactos %}
-                <tr>
-                    <td>{{data.cedula}}</td>
-                    <td>{{data.nombre}}</td>
-                    <td>{{data.apellido}}</td>
-                    <td>{{data.correo}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            
-            
-        </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in dataContactos %}
+            <tr>
+                <td>{{data.cedula}}</td>
+                <td>{{data.nombre}}</td>
+                <td>{{data.apellido}}</td>
+                <td>{{data.correo}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form class="forms" method="POST" action="/exportarDatos/">
+        {% csrf_token %}
+        <input type="submit" value="Exportar">
+    </form>
 
-    
+    <a href="/media/dataContactos.xlsx" target="blank">Descargar</a>
+        
+        
     
 
 
